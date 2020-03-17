@@ -43,5 +43,6 @@ fun main() {
     eventDistributor.subscribe(subscriber2)
 
     eventDistributor.emit(Event(0))
+
     eventDistributor.distribute()
 }
