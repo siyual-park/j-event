@@ -8,11 +8,15 @@ interface EventChannel {
 
     fun removeReceiver(receiver: EventObserver): Boolean
 
-    fun resolve()
-
     fun send(request: EventRequest)
 
-    fun receive(): EventRequest?
+    fun receive()
+
+    fun resolve()
 
     fun close()
+
+    fun isNotEmpty(): Boolean
+
+    fun isEmpty(): Boolean
 }

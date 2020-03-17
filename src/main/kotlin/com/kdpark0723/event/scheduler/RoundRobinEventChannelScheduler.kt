@@ -17,13 +17,6 @@ class RoundRobinEventChannelScheduler(override val channels: List<EventChannel>)
         return channels.all { it.removeReceiver(receiver) }
     }
 
-    override fun resolve() {
-        if (isClose)
-            throw ChannelIsClose()
-
-        channels.forEach { it.resolve() }
-    }
-
     override fun send(request: EventRequest) {
         if (isClose)
             throw ChannelIsClose()
@@ -34,16 +27,29 @@ class RoundRobinEventChannelScheduler(override val channels: List<EventChannel>)
         }
     }
 
-    override fun receive(): EventRequest? {
+    override fun resolve() {
         if (isClose)
             throw ChannelIsClose()
 
-        next = ((next - 1) + channels.size) % channels.size
+        channels.forEach { it.resolve() }
+    }
 
-        return channels[next].receive()
+    override fun receive() {
+        if (isClose)
+            throw ChannelIsClose()
+
+        channels.forEach { it.receive() }
     }
 
     override fun close() {
         isClose = true
+    }
+
+    override fun isNotEmpty(): Boolean {
+        return !this.isEmpty()
+    }
+
+    override fun isEmpty(): Boolean {
+        return channels.all { it.isEmpty() }
     }
 }

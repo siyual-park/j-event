@@ -17,17 +17,6 @@ class SyncEventChannel(private var queue: EventQueue) : EventChannel {
         return subscribers.remove(receiver)
     }
 
-    override fun resolve() {
-        if (isClose)
-            throw ChannelIsClose()
-
-        while (queue.isNotEmpty()) {
-            val request = queue.poll()
-
-            subscribers.forEach { it.listener(request) }
-        }
-    }
-
     override fun send(request: EventRequest) {
         if (isClose)
             throw ChannelIsClose()
@@ -35,14 +24,35 @@ class SyncEventChannel(private var queue: EventQueue) : EventChannel {
         queue.add(request)
     }
 
-    override fun receive(): EventRequest? {
+    override fun resolve() {
         if (isClose)
             throw ChannelIsClose()
 
-        return queue.poll()
+        while (isNotEmpty()) {
+            receive()
+        }
+    }
+
+    override fun receive() {
+        if (isClose)
+            throw ChannelIsClose()
+
+        if (isNotEmpty()) {
+            val request = queue.poll()
+
+            subscribers.forEach { it.listener(request) }
+        }
     }
 
     override fun close() {
         isClose = true
+    }
+
+    override fun isNotEmpty(): Boolean {
+        return queue.isNotEmpty()
+    }
+
+    override fun isEmpty(): Boolean {
+        return queue.isEmpty()
     }
 }
