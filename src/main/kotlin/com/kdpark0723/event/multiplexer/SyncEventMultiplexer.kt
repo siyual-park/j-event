@@ -1,6 +1,6 @@
 package com.kdpark0723.event.multiplexer
 
-import com.kdpark0723.event.subscriber.EventWorker
+import com.kdpark0723.event.observer.EventWorker
 
 class SyncEventMultiplexer : EventMultiplexer() {
     private val workers: MutableMap<String, EventWorker> = mutableMapOf()

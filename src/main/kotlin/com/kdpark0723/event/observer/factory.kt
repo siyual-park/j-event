@@ -1,4 +1,4 @@
-package com.kdpark0723.event.subscriber
+package com.kdpark0723.event.observer
 
 inline fun <reified P1 : Any> eventWorkerFrom(event: String, crossinline worker: (p1: P1) -> Unit): EventWorker {
     return EventWorkerImpl(event) {

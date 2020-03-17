@@ -1,12 +1,12 @@
 package com.kdpark0723.event.dispatcher
 
+import com.kdpark0723.event.channel.EventChannel
 import com.kdpark0723.event.multiplexer.EventMultiplexer
+import com.kdpark0723.event.observer.EventWorker
 import com.kdpark0723.event.request.EventRequest
-import com.kdpark0723.event.scheduler.EventChannelScheduler
-import com.kdpark0723.event.subscriber.EventWorker
 
 class EventDispatcher(
-    private val channelsScheduler: EventChannelScheduler,
+    private val channel: EventChannel,
     private val multiplexer: EventMultiplexer
 ) {
     init {
@@ -14,7 +14,7 @@ class EventDispatcher(
     }
 
     private fun addMultiplexerInChannels() {
-        channelsScheduler.addSubscriberAll(multiplexer)
+        channel.addReceiver(multiplexer)
     }
 
     fun addWorker(worker: EventWorker): Boolean {
@@ -29,11 +29,11 @@ class EventDispatcher(
         return multiplexer.removeWorker(event)
     }
 
-    fun push(request: EventRequest) {
-        return channelsScheduler.push(request)
+    fun send(request: EventRequest) {
+        return channel.send(request)
     }
 
     fun resolve() {
-        channelsScheduler.resolveAll()
+        channel.resolve()
     }
 }

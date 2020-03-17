@@ -1,10 +1,10 @@
 package com.kdpark0723.event.multiplexer
 
+import com.kdpark0723.event.observer.EventObserver
+import com.kdpark0723.event.observer.EventWorker
 import com.kdpark0723.event.request.EventRequest
-import com.kdpark0723.event.subscriber.EventSubscriber
-import com.kdpark0723.event.subscriber.EventWorker
 
-abstract class EventMultiplexer : EventSubscriber {
+abstract class EventMultiplexer : EventObserver {
     abstract fun addWorker(worker: EventWorker): Boolean
 
     abstract fun removeWorker(worker: EventWorker): Boolean

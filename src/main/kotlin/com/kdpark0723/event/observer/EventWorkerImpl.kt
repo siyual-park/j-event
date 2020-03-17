@@ -1,4 +1,4 @@
-package com.kdpark0723.event.subscriber
+package com.kdpark0723.event.observer
 
 import com.kdpark0723.event.request.EventRequest
 

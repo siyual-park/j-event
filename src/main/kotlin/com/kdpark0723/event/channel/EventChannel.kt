@@ -1,19 +1,18 @@
 package com.kdpark0723.event.channel
 
-import com.kdpark0723.event.queue.EventQueue
+import com.kdpark0723.event.observer.EventObserver
 import com.kdpark0723.event.request.EventRequest
-import com.kdpark0723.event.subscriber.EventSubscriber
 
-abstract class EventChannel(
-    protected val queue: EventQueue
-) {
-    abstract fun addSubscriber(subscriber: EventSubscriber): Boolean
+interface EventChannel {
+    fun addReceiver(receiver: EventObserver): Boolean
 
-    abstract fun removeSubscriber(subscriber: EventSubscriber): Boolean
+    fun removeReceiver(receiver: EventObserver): Boolean
 
-    abstract fun resolve()
+    fun resolve()
 
-    fun send(request: EventRequest) {
-        queue.add(request)
-    }
+    fun send(request: EventRequest)
+
+    fun receive(): EventRequest?
+
+    fun close()
 }
