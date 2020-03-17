@@ -13,8 +13,7 @@ abstract class EventMultiplexer : EventObserver {
 
     abstract fun getWorker(event: String): EventWorker?
 
-    override fun listener(request: EventRequest): Boolean {
-        val worker = getWorker(request.name)
-        return worker?.listener(request) ?: false
+    override fun listener(request: EventRequest) {
+        getWorker(request.name)?.listener(request)
     }
 }

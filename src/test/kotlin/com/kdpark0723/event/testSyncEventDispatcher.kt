@@ -8,13 +8,16 @@ fun main() {
     val dispatcher = syncEventDispatcherFrom(10)
 
     dispatcher.addWorker(eventWorkerFrom("pass") { a: Int ->
+        if (a > 100) {
+            println("Done!")
+            return@eventWorkerFrom
+        }
         println(a)
+
+        dispatcher.send(EventRequest("pass", arrayOf(a)))
+        dispatcher.resolve()
     })
 
-    repeat(10) {
-        dispatcher.send(EventRequest("pass", arrayOf(it)))
-        dispatcher.send(EventRequest("pass", arrayOf(it)))
-    }
-
+    dispatcher.send(EventRequest("pass", arrayOf(1)))
     dispatcher.resolve()
 }
