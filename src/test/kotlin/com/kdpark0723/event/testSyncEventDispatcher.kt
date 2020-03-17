@@ -14,7 +14,7 @@ fun main() {
         }
         println(a)
 
-        dispatcher.send(EventRequest("pass", arrayOf(a)))
+        dispatcher.send(EventRequest("pass", arrayOf(a + 1)))
         dispatcher.resolve()
     })
 
