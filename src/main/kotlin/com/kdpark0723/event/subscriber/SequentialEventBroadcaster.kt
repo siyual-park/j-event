@@ -3,7 +3,7 @@ package com.kdpark0723.event.subscriber
 import com.kdpark0723.event.event.Event
 import java.util.*
 
-class SingleEventBroadcaster : EventBroadcaster {
+class SequentialEventBroadcaster : EventBroadcaster {
     private val subscribers: MutableSet<EventSubscriber> = Collections.synchronizedSet(mutableSetOf())
 
     override fun subscribe(subscriber: EventSubscriber) = subscribers.add(subscriber)

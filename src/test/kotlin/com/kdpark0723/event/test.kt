@@ -5,12 +5,12 @@ import com.kdpark0723.event.distributor.EventDistributor
 import com.kdpark0723.event.event.Event
 import com.kdpark0723.event.queue.ConcurrentEventQueue
 import com.kdpark0723.event.subscriber.EventSubscriber
-import com.kdpark0723.event.subscriber.SingleEventBroadcaster
+import com.kdpark0723.event.subscriber.SequentialEventBroadcaster
 
 fun main() {
     val eventDistributor = EventDistributor(
         QueueTransferableEventChannel(ConcurrentEventQueue()),
-        SingleEventBroadcaster()
+        SequentialEventBroadcaster()
     )
     val subscriber1 = object : EventSubscriber {
         override fun onEvent(event: Event) {
