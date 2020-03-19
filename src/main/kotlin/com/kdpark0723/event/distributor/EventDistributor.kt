@@ -1,26 +1,26 @@
 package com.kdpark0723.event.distributor
 
 import com.kdpark0723.event.channel.TransferableEventChannel
+import com.kdpark0723.event.consumer.EventConsumer
 import com.kdpark0723.event.event.Event
+import com.kdpark0723.event.producer.EventProducer
 import com.kdpark0723.event.publisher.EventPublisher
+import com.kdpark0723.event.subscriber.EventBroadcaster
 import com.kdpark0723.event.subscriber.EventSubscriber
-import java.util.Collections.synchronizedSet
 
-abstract class EventDistributor(
-    protected val channel: TransferableEventChannel
-) : EventSubscriber, EventPublisher {
-    protected val subscribers: MutableSet<EventSubscriber> = synchronizedSet(mutableSetOf())
+class EventDistributor(
+    channel: TransferableEventChannel,
+    private val broadcaster: EventBroadcaster
+) : EventSubscriber, EventPublisher, EventBroadcaster {
+    private val consumer = EventConsumer(channel, broadcaster)
+    private val producer = EventProducer(channel)
 
-    fun subscribe(subscriber: EventSubscriber) = subscribers.add(subscriber)
-    fun unsubscribe(subscriber: EventSubscriber) = subscribers.remove(subscriber)
+    override fun subscribe(subscriber: EventSubscriber) = broadcaster.subscribe(subscriber)
+    override fun unsubscribe(subscriber: EventSubscriber) = broadcaster.unsubscribe(subscriber)
 
-    fun emit(event: Event) {
-        publishEvent(event)
-    }
+    override fun publishEvent(event: Event) = producer.publishEvent(event)
 
-    abstract fun distribute()
+    override fun onEvent(event: Event) = consumer.onEvent(event)
 
-    override fun publishEvent(event: Event) {
-        channel.send(event)
-    }
+    fun distribute() = consumer.consume()
 }
