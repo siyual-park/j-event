@@ -12,6 +12,7 @@ class EventConsumer(
         subscriber.onEvent(event)
     }
 
+    @Synchronized
     fun consume() {
         while (channel.isNotEmpty()) {
             subscriber.onEvent(channel.receive())
