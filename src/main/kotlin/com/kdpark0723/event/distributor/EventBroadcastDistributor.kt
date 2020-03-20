@@ -1,7 +1,7 @@
 package com.kdpark0723.event.distributor
 
+import com.kdpark0723.event.broadcaster.EventBroadcaster
 import com.kdpark0723.event.channel.TransferableEventChannel
-import com.kdpark0723.event.subscriber.EventBroadcaster
 import com.kdpark0723.event.subscriber.EventSubscriber
 
 class EventBroadcastDistributor(

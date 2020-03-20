@@ -1,6 +1,7 @@
-package com.kdpark0723.event.subscriber
+package com.kdpark0723.event.broadcaster
 
 import com.kdpark0723.event.event.Event
+import com.kdpark0723.event.subscriber.EventSubscriber
 
 class SequentialEventBroadcaster : EventBroadcaster {
     private val subscribers: MutableSet<EventSubscriber> = mutableSetOf()
