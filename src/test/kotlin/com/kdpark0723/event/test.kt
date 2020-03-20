@@ -1,7 +1,7 @@
 package com.kdpark0723.event
 
 import com.kdpark0723.event.channel.QueueTransferableEventChannel
-import com.kdpark0723.event.distributor.EventDistributor
+import com.kdpark0723.event.distributor.EventBroadcastDistributor
 import com.kdpark0723.event.event.Event
 import com.kdpark0723.event.event.NamedSource
 import com.kdpark0723.event.queue.ConcurrentEventQueue
@@ -14,7 +14,7 @@ import java.util.concurrent.Executors
 fun main() {
     val executorService = Executors.newCachedThreadPool()
 
-    val eventDistributor = EventDistributor(
+    val eventDistributor = EventBroadcastDistributor(
         QueueTransferableEventChannel(ConcurrentEventQueue()),
         ConcurrentEventBroadcaster(executorService)
     )
