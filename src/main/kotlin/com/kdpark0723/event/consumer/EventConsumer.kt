@@ -14,8 +14,9 @@ class EventConsumer(
 
     @Synchronized
     fun consume() {
-        while (channel.isNotEmpty()) {
-            subscriber.onEvent(channel.receive())
+        while (true) {
+            val event = channel.receive() ?: break
+            subscriber.onEvent(event)
         }
     }
 }

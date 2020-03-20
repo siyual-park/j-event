@@ -12,7 +12,7 @@ class TransferableEventQueueChannel(
         queue.add(event)
     }
 
-    override fun receive(): Event {
+    override fun receive(): Event? {
         return queue.poll()
     }
 

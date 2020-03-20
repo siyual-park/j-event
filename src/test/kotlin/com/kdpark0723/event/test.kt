@@ -4,18 +4,15 @@ import com.kdpark0723.event.broadcaster.ConcurrentEventBroadcaster
 import com.kdpark0723.event.channel.TransferableEventQueueChannel
 import com.kdpark0723.event.distributor.EventDistributor
 import com.kdpark0723.event.event.Event
-import com.kdpark0723.event.event.NamedSource
 import com.kdpark0723.event.queue.ConcurrentEventQueue
-import com.kdpark0723.event.scheduler.CompoundedEventScheduler
+import com.kdpark0723.event.scheduler.ConcurrentEventScheduler
 import com.kdpark0723.event.subscriber.EventSubscriber
-import com.kdpark0723.event.subscriber.ExecutorServiceShutdownEventSubscriber
-import com.kdpark0723.event.subscriber.executorServiceShutdownEvent
 import java.util.concurrent.Executors
 
 fun main() {
     val executorService = Executors.newCachedThreadPool()
     val broadcaster = ConcurrentEventBroadcaster()
-    val scheduler = CompoundedEventScheduler(broadcaster, executorService)
+    val scheduler = ConcurrentEventScheduler(broadcaster, executorService)
     val channel = TransferableEventQueueChannel(ConcurrentEventQueue())
     val eventDistributor = EventDistributor(channel, scheduler)
 
@@ -26,7 +23,6 @@ fun main() {
 
                 if (a > 10) {
                     println("Done.")
-                    eventDistributor.publishEvent(Event(NamedSource(executorServiceShutdownEvent, executorService)))
                     return
                 }
 
@@ -42,7 +38,6 @@ fun main() {
 
                 if (a > 10) {
                     println("Done.")
-                    eventDistributor.publishEvent(Event(NamedSource(executorServiceShutdownEvent, executorService)))
                     return
                 }
 
@@ -51,15 +46,15 @@ fun main() {
             }
         }
     }
-    val executorServiceShutdownEventSubscriber = ExecutorServiceShutdownEventSubscriber()
 
     broadcaster.subscribe(subscriber1)
     broadcaster.subscribe(subscriber2)
-    broadcaster.subscribe(executorServiceShutdownEventSubscriber)
 
     eventDistributor.publishEvent(Event(0))
 
-    while (!executorService.isShutdown) {
+    while (!executorService.isTerminated) {
         eventDistributor.distribute()
     }
+
+    executorService.shutdown()
 }
