@@ -3,7 +3,7 @@ package com.kdpark0723.event.channel
 import com.kdpark0723.event.event.Event
 import com.kdpark0723.event.queue.EventQueue
 
-class QueueTransferableEventChannel(
+class TransferableEventQueueChannel(
     private val queue: EventQueue
 ) : TransferableEventChannel {
     private var isClose = false
