@@ -5,14 +5,14 @@ import com.kdpark0723.event.channel.TransferableEventQueueChannel
 import com.kdpark0723.event.distributor.EventDistributor
 import com.kdpark0723.event.event.Event
 import com.kdpark0723.event.queue.ConcurrentEventQueue
-import com.kdpark0723.event.scheduler.ConcurrentEventScheduler
+import com.kdpark0723.event.scheduler.CompoundedEventScheduler
 import com.kdpark0723.event.subscriber.EventSubscriber
 import java.util.concurrent.Executors
 
 fun main() {
-    val executorService = Executors.newCachedThreadPool()
     val broadcaster = ConcurrentEventBroadcaster()
-    val scheduler = ConcurrentEventScheduler(broadcaster, executorService)
+    val executorService = Executors.newCachedThreadPool()
+    val scheduler = CompoundedEventScheduler(broadcaster, executorService)
     val channel = TransferableEventQueueChannel(ConcurrentEventQueue())
     val eventDistributor = EventDistributor(channel, scheduler)
 
@@ -23,6 +23,7 @@ fun main() {
 
                 if (a > 10) {
                     println("Done.")
+                    executorService.shutdown()
                     return
                 }
 
@@ -38,6 +39,7 @@ fun main() {
 
                 if (a > 10) {
                     println("Done.")
+                    executorService.shutdown()
                     return
                 }
 
