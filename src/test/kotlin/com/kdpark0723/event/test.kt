@@ -57,6 +57,4 @@ fun main() {
     while (!executorService.isTerminated) {
         eventDistributor.distribute()
     }
-
-    executorService.shutdown()
 }
